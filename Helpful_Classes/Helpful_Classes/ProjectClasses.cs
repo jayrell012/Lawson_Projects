@@ -24,7 +24,7 @@ namespace Helpful_Classes
     class MSSqlExecuter
     {
         SqlConnection con;
-        public void connect(string ipPort, string dbName, string uid, string pwd)
+        public SqlConnection connect(string ipPort, string dbName, string uid, string pwd)
         {
             con = new SqlConnection("SERVER=" + ipPort + ";" +
                                     "DATABASE= " + dbName + ";" +
@@ -32,6 +32,7 @@ namespace Helpful_Classes
                                     "PWD= " + pwd + " " +
                                     "");
             con.Open();
+            return con;
         }
 
         public void close()
@@ -39,10 +40,22 @@ namespace Helpful_Classes
             con.Close();
         }
 
-        public void ExecQ(string q)
+        public void ExecQ(string Query_, SqlConnection sqlConnection)
         {
-            SqlCommand cmd = new SqlCommand(q, con);
-            cmd.ExecuteNonQuery();
+            SqlTransaction sqlTransaction;
+            sqlTransaction = sqlConnection.BeginTransaction();
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand(Query_, sqlConnection, sqlTransaction);
+                cmd.ExecuteNonQuery();
+                cmd.CommandTimeout = 0;
+                sqlTransaction.Commit();
+            }
+            catch (SqlException sqlError)
+            {
+                sqlTransaction.Rollback();
+            }
         }
 
         public void Reader(string q)
