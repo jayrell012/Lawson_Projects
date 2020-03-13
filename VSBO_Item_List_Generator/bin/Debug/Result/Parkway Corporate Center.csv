@@ -1,0 +1,19 @@
+storeID,storeName,itemCode,itemDescription,barcode,sellingPrice,baseCost,netCost,averageCost,department,category,vatType,assortmentType
+10015,Legarda,00000020000001,FastFood,,0.00,0,0,-1.000000,01,FastFood,,Out of assortment
+10015,Legarda,00000020000002,Beverage,,0.00,0,0,-1.000000,02,Beverage,,Out of assortment
+10015,Legarda,00000020000003,LifestyleFood,,0.00,0,0,-1.000000,03,LifestyleFood,,Out of assortment
+10015,Legarda,00000020000004,BasicFood,,0.00,0,0,-1.000000,04,BasicFood,,Out of assortment
+10015,Legarda,00000020000005,Perishables,,0.00,0,0,-1.000000,05,Perishables,,Out of assortment
+10015,Legarda,00000020000006,NonFood,,0.00,0,0,-1.000000,06,NonFood,,Out of assortment
+10015,Legarda,00000020000007,Services,,0.00,0,0,-1.000000,07,Services,,Out of assortment
+10015,Legarda,00000020000009,CONCESS,,0.00,0,0,-1.000000,09,CONCESS,,Out of assortment
+10015,Legarda,00000020000010,Promotions,,0.00,0,0,-1.000000,10,Promotions,,Out of assortment
+10015,Legarda,00000020000011,Miscellaneous,,0.00,0,0,-1.000000,11,Miscellaneous,,Out of assortment
+10015,Legarda,00000020000012,Non-Consumables,,0.00,0,0,-1.000000,12,Non-Consumables,,Out of assortment
+10015,Legarda,00000020000013,Office Supplies,,0.00,0,0,-1.000000,13,Office Supplies,,Out of assortment
+10015,Legarda,00000020000014,Non-merchandise,,0.00,0,0,-1.000000,14,Non-merchandise,,Out of assortment
+10015,Legarda,00000020000015,Consumables,,0.00,0,0,-1.000000,15,Consumables,,Out of assortment
+10015,Legarda,00000020000016,CONDIMENTS,,0.00,0,0,-1.000000,16,Condiments,,Out of assortment
+10015,Legarda,00000020000018,Honest Bee,,0.00,0,0,-1.000000,18,Honest Bee,,Out of assortment
+10015,Legarda,01110030000029,Asian Sandwich,02999998000506,39.00,29.000000,25.892900,25.892900,01110301,Triangle,VATABLE,Out of assortment
+10015,Legarda,01110030000053,Kani Salad,02999998000605,39.00,28.080000,25.071400,25.071400,01110402,OthersSalad,VATABLE,In assortment
