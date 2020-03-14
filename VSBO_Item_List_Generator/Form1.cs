@@ -130,51 +130,58 @@ namespace VSBO_Item_List_Generator
 
         private void addControlTab(string selectedStoreName, int count, string strSelectedStore)
         {
-            tabControl1.TabPages.Add(selectedStoreName);
-            DataGridView grid = new DataGridView() { Dock = DockStyle.Fill };
-            tabControl1.TabPages[count].Controls.Add(grid);
-
-            var filtered = listItems.Where(x => x.storeID.Equals(strSelectedStore))
-                                          .Select(x =>
-                                                    new
-                                                    {
-                                                    x.storeID,
-                                                    x.storeName,
-                                                    x.itemCode,
-                                                    x.itemDescription,
-                                                    x.barcode,
-                                                    x.sellingPrice,
-                                                    x.baseCost,
-                                                    x.netCost,
-                                                    x.averageCost,
-                                                    x.department,
-                                                    x.category,
-                                                    x.vatType,
-                                                    x.assortmentType
-                                                    }
-                                                  ).ToList();
-
-            grid.DataSource = filtered;
-
-            dataGridViews.Add(grid);
-
-            grid.Columns[0].Visible = false;
-            grid.Columns[1].Visible = false;
-            grid.Columns[2].Visible = true;
-            grid.Columns[3].Visible = true;
-            grid.Columns[4].Visible = false;
-            grid.Columns[5].Visible = false;
-            grid.Columns[6].Visible = false;
-            grid.Columns[7].Visible = false;
-            grid.Columns[8].Visible = false;
-            grid.Columns[9].Visible = false;
-            grid.Columns[10].Visible = false;
-            grid.Columns[11].Visible = false;
-            grid.Columns[12].Visible = false;
-
-            foreach (int checkd in checkedListBox2.CheckedIndices)
+            try
             {
-                grid.Columns[checkd + 4].Visible = true;
+                tabControl1.TabPages.Add(selectedStoreName);
+                DataGridView grid = new DataGridView() { Dock = DockStyle.Fill };
+                tabControl1.TabPages[count].Controls.Add(grid);
+
+                var filtered = listItems.Where(x => x.storeID.Equals(strSelectedStore))
+                                              .Select(x =>
+                                                        new
+                                                        {
+                                                            x.storeID,
+                                                            x.storeName,
+                                                            x.itemCode,
+                                                            x.itemDescription,
+                                                            x.barcode,
+                                                            x.sellingPrice,
+                                                            x.baseCost,
+                                                            x.netCost,
+                                                            x.averageCost,
+                                                            x.department,
+                                                            x.category,
+                                                            x.vatType,
+                                                            x.assortmentType
+                                                        }
+                                                      ).ToList();
+
+                grid.DataSource = filtered;
+
+                dataGridViews.Add(grid);
+
+                grid.Columns[0].Visible = true;
+                grid.Columns[1].Visible = true;
+                grid.Columns[2].Visible = true;
+                grid.Columns[3].Visible = true;
+                grid.Columns[4].Visible = false;
+                grid.Columns[5].Visible = false;
+                grid.Columns[6].Visible = false;
+                grid.Columns[7].Visible = false;
+                grid.Columns[8].Visible = false;
+                grid.Columns[9].Visible = false;
+                grid.Columns[10].Visible = false;
+                grid.Columns[11].Visible = false;
+                grid.Columns[12].Visible = false;
+
+                foreach (int checkd in checkedListBox2.CheckedIndices)
+                {
+                    grid.Columns[checkd + 4].Visible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -472,11 +479,16 @@ namespace VSBO_Item_List_Generator
         private void btnStopSaveExcel__Click(object sender, EventArgs e)
         {
             buttonVisible("Done");
+            backgroundWorker2.CancelAsync();
         }
 
         private void btnSaveExcel__Click(object sender, EventArgs e)
         {
-            buttonVisible("Excel");
+            if (!backgroundWorker2.IsBusy)
+            {
+                buttonVisible("Excel");
+                backgroundWorker2.RunWorkerAsync();
+            }
         }
 
         private void dataGridView1_Enter(object sender, EventArgs e)
@@ -492,33 +504,44 @@ namespace VSBO_Item_List_Generator
         StringBuilder strBuild = new StringBuilder();
         private void button4_Click(object sender, EventArgs e)
         {
-            if (!backgroundWorker2.IsBusy)
-            {
-                backgroundWorker2.RunWorkerAsync();
-            }
+           
         }
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
             int percentage = 0;
             for (int i = 0; i < dataGridViews.Count; i++)
             {
+                if (backgroundWorker2.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                List<object> obj = new List<object>();
+                obj.Add(i);
+                obj.Add(dataGridViews[i].Rows[0].Cells[1].Value.ToString());
+
                 percentage = Convert.ToInt32((((double)i / (double)dataGridViews.Count)) * 100);
-                backgroundWorker2.ReportProgress(percentage);
+                backgroundWorker2.ReportProgress(percentage, obj);
 
                 strBuild = new StringBuilder();
-                saveCSV(i, dataGridViews[i].Rows[0].Cells[1].Value.ToString());
+                
             }
         }
         
         private void backgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            List<object> list = e.UserState as List<object>;
+
+            storeProgressBar.Visible = true;
             storeProgressBar.Value = e.ProgressPercentage;
+            saveCSV(Convert.ToInt32(list[0]), list[1].ToString());
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            buttonVisible("Done");
+            storeProgressBar.Visible = false;
             MessageBox.Show("Done", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //MessageBox.Show(strBuild.ToString());
         }
 
         private void saveCSV(int count, string storeName)
@@ -541,12 +564,20 @@ namespace VSBO_Item_List_Generator
                     }
                     strBuild.AppendLine(rows.TrimEnd(','));
                 }
+
                 File.AppendAllText(Environment.CurrentDirectory + $@"\Result\{storeName}.csv", strBuild.ToString());
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
+
+        //private int exportingPercentage(int min, int max)
+        //{
+        //    int percentage = Convert.ToInt32((((double)min / (double)max)) * 100);
+        //    return percentage;
+        //}
     }
 }
