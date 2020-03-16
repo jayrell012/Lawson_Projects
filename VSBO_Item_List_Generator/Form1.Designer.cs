@@ -38,33 +38,28 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.label4 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.label5 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.btnStop_ = new Bunifu.Framework.UI.BunifuFlatButton();
             this.btnRun_ = new Bunifu.Framework.UI.BunifuFlatButton();
             this.btnReset_ = new Bunifu.Framework.UI.BunifuFlatButton();
             this.btnStopSaveExcel_ = new Bunifu.Framework.UI.BunifuFlatButton();
             this.btnSaveExcel_ = new Bunifu.Framework.UI.BunifuFlatButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.exportingProgressBar = new System.Windows.Forms.ProgressBar();
             this.storeProgressBar = new System.Windows.Forms.ProgressBar();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.panel3.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkedListBox1
@@ -96,13 +91,15 @@
             "BASE COST",
             "NET COST",
             "AVERAGE COST",
+            "SUPLLIER",
             "DEPARTMENT",
             "CATEGORY",
-            "VAT TYPE",
-            "ASSORTMENT TYPE"});
+            "VAT TPYE",
+            "ASSORTMENT",
+            "SUPPLIER"});
             this.checkedListBox2.Location = new System.Drawing.Point(3, 26);
             this.checkedListBox2.Name = "checkedListBox2";
-            this.checkedListBox2.Size = new System.Drawing.Size(134, 139);
+            this.checkedListBox2.Size = new System.Drawing.Size(134, 154);
             this.checkedListBox2.TabIndex = 15;
             // 
             // button3
@@ -147,7 +144,7 @@
             this.panel2.Controls.Add(this.checkedListBox2);
             this.panel2.Location = new System.Drawing.Point(169, 34);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(140, 168);
+            this.panel2.Size = new System.Drawing.Size(140, 185);
             this.panel2.TabIndex = 20;
             // 
             // label3
@@ -174,6 +171,37 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.Controls.Add(this.label5);
+            this.panel3.Controls.Add(this.progressBar1);
+            this.panel3.Location = new System.Drawing.Point(534, 185);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(479, 100);
+            this.panel3.TabIndex = 8;
+            this.panel3.Visible = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label5.Location = new System.Drawing.Point(104, 26);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(200, 46);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "{0}%\r\ngetting data from {1}";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar1.Location = new System.Drawing.Point(0, 90);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(479, 10);
+            this.progressBar1.TabIndex = 23;
             // 
             // dataGridView1
             // 
@@ -213,12 +241,13 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(1001, 22);
+            this.button4.Location = new System.Drawing.Point(1013, 12);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 22;
             this.button4.Text = "Test";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Visible = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // backgroundWorker1
@@ -228,37 +257,6 @@
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(0, 90);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(479, 10);
-            this.progressBar1.TabIndex = 23;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label5.Location = new System.Drawing.Point(104, 26);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(200, 46);
-            this.label5.TabIndex = 24;
-            this.label5.Text = "{0}%\r\ngetting data from {1}";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.Azure;
-            this.panel3.Controls.Add(this.label5);
-            this.panel3.Controls.Add(this.progressBar1);
-            this.panel3.Location = new System.Drawing.Point(534, 185);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(479, 100);
-            this.panel3.TabIndex = 8;
-            this.panel3.Visible = false;
             // 
             // btnStop_
             // 
@@ -282,7 +280,7 @@
             this.btnStop_.IconVisible = true;
             this.btnStop_.IconZoom = 45D;
             this.btnStop_.IsTab = false;
-            this.btnStop_.Location = new System.Drawing.Point(1192, 22);
+            this.btnStop_.Location = new System.Drawing.Point(1192, 8);
             this.btnStop_.Name = "btnStop_";
             this.btnStop_.Normalcolor = System.Drawing.Color.Crimson;
             this.btnStop_.OnHovercolor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
@@ -318,7 +316,7 @@
             this.btnRun_.IconVisible = true;
             this.btnRun_.IconZoom = 45D;
             this.btnRun_.IsTab = false;
-            this.btnRun_.Location = new System.Drawing.Point(1192, 22);
+            this.btnRun_.Location = new System.Drawing.Point(1192, 8);
             this.btnRun_.Name = "btnRun_";
             this.btnRun_.Normalcolor = System.Drawing.Color.MediumSeaGreen;
             this.btnRun_.OnHovercolor = System.Drawing.Color.MediumAquamarine;
@@ -354,7 +352,7 @@
             this.btnReset_.IconVisible = true;
             this.btnReset_.IconZoom = 35D;
             this.btnReset_.IsTab = false;
-            this.btnReset_.Location = new System.Drawing.Point(1103, 22);
+            this.btnReset_.Location = new System.Drawing.Point(1103, 8);
             this.btnReset_.Name = "btnReset_";
             this.btnReset_.Normalcolor = System.Drawing.Color.Tomato;
             this.btnReset_.OnHovercolor = System.Drawing.Color.SandyBrown;
@@ -390,7 +388,7 @@
             this.btnStopSaveExcel_.IconVisible = true;
             this.btnStopSaveExcel_.IconZoom = 45D;
             this.btnStopSaveExcel_.IsTab = false;
-            this.btnStopSaveExcel_.Location = new System.Drawing.Point(1192, 22);
+            this.btnStopSaveExcel_.Location = new System.Drawing.Point(1192, 8);
             this.btnStopSaveExcel_.Name = "btnStopSaveExcel_";
             this.btnStopSaveExcel_.Normalcolor = System.Drawing.Color.Crimson;
             this.btnStopSaveExcel_.OnHovercolor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
@@ -426,7 +424,7 @@
             this.btnSaveExcel_.IconVisible = true;
             this.btnSaveExcel_.IconZoom = 45D;
             this.btnSaveExcel_.IsTab = false;
-            this.btnSaveExcel_.Location = new System.Drawing.Point(1192, 22);
+            this.btnSaveExcel_.Location = new System.Drawing.Point(1192, 8);
             this.btnSaveExcel_.Name = "btnSaveExcel_";
             this.btnSaveExcel_.Normalcolor = System.Drawing.Color.MediumSeaGreen;
             this.btnSaveExcel_.OnHovercolor = System.Drawing.Color.MediumAquamarine;
@@ -451,49 +449,13 @@
             this.label1.TabIndex = 23;
             this.label1.Text = "1/1 tab(s)";
             // 
-            // panel4
-            // 
-            this.panel4.BackColor = System.Drawing.Color.Azure;
-            this.panel4.Controls.Add(this.label7);
-            this.panel4.Controls.Add(this.label6);
-            this.panel4.Controls.Add(this.storeProgressBar);
-            this.panel4.Controls.Add(this.exportingProgressBar);
-            this.panel4.Location = new System.Drawing.Point(439, 8);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(479, 63);
-            this.panel4.TabIndex = 25;
-            // 
-            // exportingProgressBar
-            // 
-            this.exportingProgressBar.Location = new System.Drawing.Point(89, 39);
-            this.exportingProgressBar.Name = "exportingProgressBar";
-            this.exportingProgressBar.Size = new System.Drawing.Size(375, 10);
-            this.exportingProgressBar.TabIndex = 23;
-            // 
             // storeProgressBar
             // 
-            this.storeProgressBar.Location = new System.Drawing.Point(89, 20);
+            this.storeProgressBar.Location = new System.Drawing.Point(893, 42);
             this.storeProgressBar.Name = "storeProgressBar";
             this.storeProgressBar.Size = new System.Drawing.Size(375, 10);
             this.storeProgressBar.TabIndex = 24;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 17);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(32, 13);
-            this.label6.TabIndex = 25;
-            this.label6.Text = "Store";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(14, 36);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 13);
-            this.label7.TabIndex = 26;
-            this.label7.Text = "Exporting";
+            this.storeProgressBar.Visible = false;
             // 
             // backgroundWorker2
             // 
@@ -509,7 +471,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1285, 597);
-            this.Controls.Add(this.panel4);
+            this.Controls.Add(this.storeProgressBar);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnStopSaveExcel_);
             this.Controls.Add(this.btnSaveExcel_);
@@ -533,12 +495,10 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.tabControl1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -568,11 +528,7 @@
         private Bunifu.Framework.UI.BunifuFlatButton btnRun_;
         private Bunifu.Framework.UI.BunifuFlatButton btnStop_;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ProgressBar storeProgressBar;
-        private System.Windows.Forms.ProgressBar exportingProgressBar;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
     }
 }

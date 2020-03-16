@@ -28,7 +28,7 @@ si.STORE_ID
 		and bc.store_id = si.store_id
 		and spr.SPR_MAIN_FLAG = '1') as NET_UCOST
 ,bo_getunitcost(si.store_id, i.item_id, CURRENT DATE) AVG_COST
---,si.CRT_VAT_PERC#
+,bspr.SPR_NAME as SUPPLIER
 ,i.DEPT_FULL_CODE# as DEPARTMENT
 ,d.DEPT_NAME as CATEGORY
 ,v.VAT_DESC as VAT_TYPE
@@ -62,6 +62,12 @@ LEFT JOIN BO_BARCODE_HST bh
 	ON si.store_id = bh.store_id
 	AND si.item_id = bh.item_id
 	AND bh.BARCODE_MAIN_FLAG = 1
+LEFT JOIN BO_SPR_ITEM bsi
+	ON bsi.STORE_ID = si.STORE_ID
+	AND bsi.ITEM_ID = si.ITEM_ID
+	AND bsi.SPR_MAIN_FLAG = 1
+LEFT JOIN BO_SPR bspr
+	ON bspr.SPR_ID = bsi.SPR_ID
 	
 LEFT JOIN vsboread.LW_DEPT d ON i.DEPT_FULL_CODE# = d.DEPT_FULL_CODE
 
@@ -73,6 +79,8 @@ left join vsboread.lw_dept d1 on (d1.dept_seq = d2.parent_dept_seq)
 
 where 
 si.STORE_ID = {0}
+and
+i.DEPT_FULL_CODE# not in (01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18)
 
 
 order by

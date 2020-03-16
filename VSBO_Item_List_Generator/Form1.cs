@@ -25,22 +25,70 @@ namespace VSBO_Item_List_Generator
         List<DataGridView> dataGridViews = new List<DataGridView>();
         List<string> selectedStores = new List<string>();
         DB2Executer dB2Executer = new DB2Executer();
+        StringBuilder strBuild = new StringBuilder();
         query query = new query();
+        bool boolAutomated;
+        List<string> strsStoreSet = new List<string>();
+        List<bool> boolFieldSet = new List<bool>();
+        bool boolSaveExcel;
+        string strSavePath;
+        bool boolExitAfterRunning;
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+            initComp();
+            fillChecklistStores();
+            initializedTextConfig();
+
+            if(boolAutomated == true)
+            {
+                autoSetUpDetailsBeforeRun();
+                buttonVisible("Run");
+                if (!backgroundWorker1.IsBusy)
+                {
+                    backgroundWorker1.RunWorkerAsync();
+                }
+            }
+        }
+
+        private void autoSetUpDetailsBeforeRun()
+        {
+
+            //Auto Select Stores
+            foreach (string str in strsStoreSet)
+            {
+
+                var storeName = listStores.Where(x => x.storeID.Equals(Convert.ToInt32(str)))
+                                          .Select(x => x.storeName).ToList();
+
+                int index = checkedListBox1.Items.IndexOf(storeName[0]);
+
+                checkedListBox1.SetItemChecked(index, true);
+            }
+
+            //Auto Select Details
+            int count = -1;
+            foreach(bool boolean in boolFieldSet)
+            {
+                count++;
+                checkedListBox2.SetItemChecked(count, boolean);
+            }
+
+
+        }
+
+        private void initComp()
         {
             panel3.Parent = this;
             panel3.BringToFront();
             panel3.Location = new Point(
-                (this.Width - panel3.Width)/2
-                ,(this.Height - panel3.Height)/2
+                (this.Width - panel3.Width) / 2
+                , (this.Height - panel3.Height) / 2
                 );
 
             this.WindowState = FormWindowState.Maximized;
             this.panel1.Visible = false;
             this.panel2.Visible = false;
-
-            fillChecklistStores();
 
             btnRun_.Show();
             btnStop_.Hide();
@@ -55,20 +103,27 @@ namespace VSBO_Item_List_Generator
 
             dB2Executer = new DB2Executer();
             dB2Executer.connect();
-            var data = dB2Executer.showDGV(query.listOfStrores());
-
-            ((ListBox)checkedListBox1).DataSource = data;
-            ((ListBox)checkedListBox1).DisplayMember = "STORE_NAME";
-            ((ListBox)checkedListBox1).ValueMember = "STORE_ID";
-
+            
             var reader = dB2Executer.Reader(query.listOfStrores());
             while(reader.Read())
             {
                 Stores stores = new Stores();
                 stores.storeID = reader.GetInt32(0);
-                stores.storeName = reader.GetString(1);
+                stores.storeName = reader.GetString(1).TrimEnd();
                 listStores.Add(stores);
             }
+
+            for(int i = 0; i < listStores.Count; i++)
+            {
+                checkedListBox1.Items.Add(listStores[i].storeName);
+            }
+
+
+            //var data = dB2Executer.showDGV(query.listOfStrores());
+
+            //((ListBox)checkedListBox1).DataSource = listStores;
+            //((ListBox)checkedListBox1).DisplayMember = "storeName";
+            //((ListBox)checkedListBox1).ValueMember = "storeID";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -149,6 +204,7 @@ namespace VSBO_Item_List_Generator
                                                             x.baseCost,
                                                             x.netCost,
                                                             x.averageCost,
+                                                            x.supplier,
                                                             x.department,
                                                             x.category,
                                                             x.vatType,
@@ -173,6 +229,7 @@ namespace VSBO_Item_List_Generator
                 grid.Columns[10].Visible = false;
                 grid.Columns[11].Visible = false;
                 grid.Columns[12].Visible = false;
+                grid.Columns[13].Visible = false;
 
                 foreach (int checkd in checkedListBox2.CheckedIndices)
                 {
@@ -199,10 +256,10 @@ namespace VSBO_Item_List_Generator
         private List<string> selectedStoresFunction()
         {
             selectedStores = new List<string>();
-
-            foreach (var item in checkedListBox1.CheckedItems)
+            
+            foreach (string str in checkedListBox1.CheckedItems)
             {
-                selectedStores.Add(((DataRowView)item)["STORE_ID"].ToString());
+                selectedStores.Add(listStores.Where(x => x.storeName.Equals(str)).Select(x => x.storeID).ToList()[0].ToString());
             }
 
             return selectedStores;
@@ -339,10 +396,11 @@ namespace VSBO_Item_List_Generator
                     items.baseCost = reader.IsDBNull(6) ? 0 : reader.GetDecimal(6);
                     items.netCost = reader.IsDBNull(7) ? 0 : reader.GetDecimal(7);
                     items.averageCost = reader.IsDBNull(8) ? 0 : reader.GetDecimal(8);
-                    items.department = reader.IsDBNull(9) ? "" : reader.GetString(9);
-                    items.category = reader.IsDBNull(10) ? "" : reader.GetString(10);
-                    items.vatType = reader.IsDBNull(11) ? "" : reader.GetString(11);
-                    items.assortmentType = reader.IsDBNull(12) ? "" : reader.GetString(12);
+                    items.supplier = reader.IsDBNull(9) ? "NO SUPPLIER" : reader.GetString(9);
+                    items.department = reader.IsDBNull(10) ? "" : reader.GetString(10);
+                    items.category = reader.IsDBNull(11) ? "" : reader.GetString(11);
+                    items.vatType = reader.IsDBNull(12) ? "" : reader.GetString(12);
+                    items.assortmentType = reader.IsDBNull(13) ? "" : reader.GetString(13);
                     listItems.Add(items);
 
                     if (backgroundWorker1.CancellationPending)
@@ -390,13 +448,21 @@ namespace VSBO_Item_List_Generator
         {
             this.Cursor = Cursors.Default;
             panel3.Visible = false;
-
-            buttonVisible("Done");
-            MessageBox.Show("Done", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             dataGridView1.DataSource = listItems;
             label4.Text = $"Records: {listItems.Count}";
+            buttonVisible("Done");
 
+            if (boolSaveExcel == true)
+            {
+                if (!backgroundWorker2.IsBusy)
+                {
+                    backgroundWorker2.RunWorkerAsync();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Execution Done", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -418,10 +484,15 @@ namespace VSBO_Item_List_Generator
                 checkedListBox1.SetItemChecked(i, false);
             }
 
+            label2.Text = "Select All";
+
             for (int i = 0; i < checkedListBox2.Items.Count; i++)
             {
                 checkedListBox2.SetItemChecked(i, false);
             }
+
+            label3.Text = "Select All";
+
             checkedListBox1.ClearSelected();
             checkedListBox2.ClearSelected();
             dataGridViews.Clear();
@@ -486,7 +557,6 @@ namespace VSBO_Item_List_Generator
         {
             if (!backgroundWorker2.IsBusy)
             {
-                buttonVisible("Excel");
                 backgroundWorker2.RunWorkerAsync();
             }
         }
@@ -501,10 +571,87 @@ namespace VSBO_Item_List_Generator
             panel1.Hide();
             panel2.Hide();
         }
-        StringBuilder strBuild = new StringBuilder();
         private void button4_Click(object sender, EventArgs e)
         {
-           
+            
+        }
+
+        private void initializedTextConfig()
+        {
+            string alltext = File.ReadAllText(Environment.CurrentDirectory + @"\Configuration\APPCONFIG.cfg");
+            string[] criteria = alltext.Split('-');
+            string automated = criteria[0].TrimStart().TrimEnd().Split('=')[1].TrimStart().TrimEnd();
+            string[] storeSet = criteria[1].TrimStart().TrimEnd().Split('=')[1].TrimStart().TrimEnd().Split('\n');
+            string[] fieldSet = criteria[2].TrimStart().TrimEnd().Split('=')[1].TrimStart().TrimEnd().Split('\n');
+            string saveExcel = criteria[3].TrimStart().TrimEnd().Split('=')[1].TrimStart().TrimEnd();
+            string savePath = criteria[4].TrimStart().TrimEnd().Split('=')[1].TrimStart().TrimEnd();
+            string exitAfterRunning = criteria[5].TrimStart().TrimEnd().Split('=')[1].TrimStart().TrimEnd();
+
+            if (automated.TrimEnd() == "true")
+            {
+                boolAutomated = true;
+            }
+            else
+            {
+                boolAutomated = false;
+            }
+
+            for (int i = 0; i < fieldSet.Count(); i++)
+            {
+                boolFieldSet.Add(Convert.ToBoolean(fieldSet[i].TrimStart().TrimEnd().Split(':')[1].TrimStart().TrimEnd()));
+            }
+
+
+            if(criteria[1].TrimStart().TrimEnd().Split('=')[1].TrimStart().TrimEnd() == "*")
+            {
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                {
+                    checkedListBox1.SetItemChecked(i, true);
+                }
+                label2.Text = "Unselect All";
+                count01 = 1;
+            }
+            else
+            {
+                for (int i = 0; i < storeSet.Count(); i++)
+                {
+                    strsStoreSet.Add(Convert.ToString(storeSet[i]));
+                }
+            }
+
+
+            if (saveExcel.TrimEnd() == "true")
+            {
+                boolSaveExcel = true;
+            }
+            else
+            {
+                boolSaveExcel = false;
+            }
+
+            strSavePath = savePath.TrimStart().TrimEnd();
+
+            if (exitAfterRunning.TrimEnd() == "true")
+            {
+                boolExitAfterRunning = true;
+            }
+            else
+            {
+                boolExitAfterRunning = false;
+            }
+
+            //MessageBox.Show("Automated: " + boolAutomated);
+            //for (int i = 0; i < strsStoreSet.Count(); i++)
+            //{
+            //    MessageBox.Show("stores: " + strsStoreSet[i]);
+            //}
+            //for (int i = 0; i < boolFieldSet.Count(); i++)
+            //{
+            //    MessageBox.Show("fields: " + boolFieldSet[i]);
+            //}
+            //MessageBox.Show("save Excel: " + boolSaveExcel.ToString());
+            //MessageBox.Show("save Path: " + strSavePath.ToString());
+            //MessageBox.Show("Exit after running: " + boolExitAfterRunning.ToString());
         }
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -522,14 +669,13 @@ namespace VSBO_Item_List_Generator
 
                 percentage = Convert.ToInt32((((double)i / (double)dataGridViews.Count)) * 100);
                 backgroundWorker2.ReportProgress(percentage, obj);
-
-                strBuild = new StringBuilder();
-                
             }
         }
         
         private void backgroundWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            label1.Text = String.Format("{0}/{1} tab(s)", tabControl1.SelectedIndex + 1, tabControl1.TabCount);
+            buttonVisible("Excel");
             List<object> list = e.UserState as List<object>;
 
             storeProgressBar.Visible = true;
@@ -541,31 +687,86 @@ namespace VSBO_Item_List_Generator
         {
             buttonVisible("Done");
             storeProgressBar.Visible = false;
-            MessageBox.Show("Done", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            if(boolExitAfterRunning == true)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                MessageBox.Show("CSV File Saved", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void saveCSV(int count, string storeName)
         {
             try
             {
-                string cols = "";
-                for (int i = 0; i < dataGridViews[count].ColumnCount; i++)
+                strBuild = new StringBuilder();
+
+                DataGridView grid = new DataGridView();
+                grid = dataGridViews[count];
+
+                grid.Columns[0].Visible = false;
+                grid.Columns[1].Visible = false;
+                grid.Columns[2].Visible = true;
+                grid.Columns[3].Visible = true;
+                grid.Columns[4].Visible = false;
+                grid.Columns[5].Visible = false;
+                grid.Columns[6].Visible = false;
+                grid.Columns[7].Visible = false;
+                grid.Columns[8].Visible = false;
+                grid.Columns[9].Visible = false;
+                grid.Columns[10].Visible = false;
+                grid.Columns[11].Visible = false;
+                grid.Columns[12].Visible = false;
+                grid.Columns[13].Visible = false;
+
+                foreach (int checkd in checkedListBox2.CheckedIndices)
                 {
-                    cols += dataGridViews[count].Columns[i].HeaderText + ",";
+                    grid.Columns[checkd + 4].Visible = true;
+                }
+                
+
+                string cols = "";
+                for (int i = 0; i < grid.ColumnCount; i++)
+                {
+                    if(grid.Columns[i].Visible == true)
+                    {
+                        cols += grid.Columns[i].HeaderText + ",";
+                    }
                 }
                 strBuild.AppendLine(cols.TrimEnd(','));
 
-                for (int row = 0; row < dataGridViews[count].RowCount; row++)
+                for (int row = 0; row < grid.RowCount; row++)
                 {
                     string rows = "";
-                    for (int col = 0; col < dataGridViews[count].ColumnCount; col++)
+                    for (int col = 0; col < grid.ColumnCount; col++)
                     {
-                        rows += dataGridView1.Rows[row].Cells[col].Value.ToString().TrimEnd() + ",";
+                        if(grid.Columns[col].Visible == true)
+                        {
+                            rows += grid.Rows[row].Cells[col].Value.ToString().TrimEnd() + ",";
+                        }
                     }
                     strBuild.AppendLine(rows.TrimEnd(','));
                 }
 
-                File.AppendAllText(Environment.CurrentDirectory + $@"\Result\{storeName}.csv", strBuild.ToString());
+                try
+                {
+                    if(File.Exists(strSavePath + @"\" + $"{storeName}.csv"))
+                    {
+                        File.Delete(strSavePath + @"\" + $"{storeName}.csv");
+                    }
+                    File.AppendAllText(strSavePath + @"\" + $"{storeName}.csv", strBuild.ToString());
+                }
+                catch
+                {
+                    if (File.Exists(Environment.CurrentDirectory + $@"\Result\{storeName}.csv"))
+                    {
+                        File.Delete(Environment.CurrentDirectory + $@"\Result\{storeName}.csv");
+                    }
+                    File.AppendAllText(Environment.CurrentDirectory + $@"\Result\{storeName}.csv", strBuild.ToString());
+                }
                 
             }
             catch (Exception ex)

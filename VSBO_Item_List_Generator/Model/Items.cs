@@ -17,6 +17,7 @@ namespace VSBO_Item_List_Generator.Model
         public decimal baseCost { get; set; }
         public decimal netCost { get; set; }
         public decimal averageCost { get; set; }
+        public string supplier { get; set; }
         public string department { get; set; }
         public string category { get; set; }
         public string vatType { get; set; }
