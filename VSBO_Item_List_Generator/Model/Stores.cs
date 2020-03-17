@@ -10,5 +10,6 @@ namespace VSBO_Item_List_Generator.Model
     {
         public int storeID { get; set; }
         public string storeName { get; set; }
+        //public char status { get; set; }
     }
 }

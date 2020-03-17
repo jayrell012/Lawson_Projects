@@ -52,8 +52,9 @@
             this.btnStopSaveExcel_ = new Bunifu.Framework.UI.BunifuFlatButton();
             this.btnSaveExcel_ = new Bunifu.Framework.UI.BunifuFlatButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.storeProgressBar = new System.Windows.Forms.ProgressBar();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.label6 = new System.Windows.Forms.Label();
+            this.storeProgressBar = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -167,7 +168,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1253, 477);
+            this.tabPage1.Size = new System.Drawing.Size(560, 332);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -177,20 +178,20 @@
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.progressBar1);
-            this.panel3.Location = new System.Drawing.Point(534, 185);
+            this.panel3.Location = new System.Drawing.Point(132, 133);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(479, 100);
+            this.panel3.Size = new System.Drawing.Size(376, 100);
             this.panel3.TabIndex = 8;
             this.panel3.Visible = false;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label5.Location = new System.Drawing.Point(104, 26);
+            this.label5.Location = new System.Drawing.Point(84, 35);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(200, 46);
+            this.label5.Size = new System.Drawing.Size(166, 38);
             this.label5.TabIndex = 24;
             this.label5.Text = "{0}%\r\ngetting data from {1}";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -200,7 +201,7 @@
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progressBar1.Location = new System.Drawing.Point(0, 90);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(479, 10);
+            this.progressBar1.Size = new System.Drawing.Size(376, 10);
             this.progressBar1.TabIndex = 23;
             // 
             // dataGridView1
@@ -210,7 +211,7 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(1247, 471);
+            this.dataGridView1.Size = new System.Drawing.Size(554, 326);
             this.dataGridView1.TabIndex = 7;
             this.dataGridView1.Enter += new System.EventHandler(this.dataGridView1_Enter);
             this.dataGridView1.MouseEnter += new System.EventHandler(this.dataGridView1_MouseEnter);
@@ -224,7 +225,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 57);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1261, 503);
+            this.tabControl1.Size = new System.Drawing.Size(568, 358);
             this.tabControl1.TabIndex = 21;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -233,7 +234,7 @@
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 572);
+            this.label4.Location = new System.Drawing.Point(12, 419);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 16);
             this.label4.TabIndex = 8;
@@ -280,7 +281,7 @@
             this.btnStop_.IconVisible = true;
             this.btnStop_.IconZoom = 45D;
             this.btnStop_.IsTab = false;
-            this.btnStop_.Location = new System.Drawing.Point(1192, 8);
+            this.btnStop_.Location = new System.Drawing.Point(499, 8);
             this.btnStop_.Name = "btnStop_";
             this.btnStop_.Normalcolor = System.Drawing.Color.Crimson;
             this.btnStop_.OnHovercolor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
@@ -316,7 +317,7 @@
             this.btnRun_.IconVisible = true;
             this.btnRun_.IconZoom = 45D;
             this.btnRun_.IsTab = false;
-            this.btnRun_.Location = new System.Drawing.Point(1192, 8);
+            this.btnRun_.Location = new System.Drawing.Point(499, 8);
             this.btnRun_.Name = "btnRun_";
             this.btnRun_.Normalcolor = System.Drawing.Color.MediumSeaGreen;
             this.btnRun_.OnHovercolor = System.Drawing.Color.MediumAquamarine;
@@ -352,7 +353,7 @@
             this.btnReset_.IconVisible = true;
             this.btnReset_.IconZoom = 35D;
             this.btnReset_.IsTab = false;
-            this.btnReset_.Location = new System.Drawing.Point(1103, 8);
+            this.btnReset_.Location = new System.Drawing.Point(410, 8);
             this.btnReset_.Name = "btnReset_";
             this.btnReset_.Normalcolor = System.Drawing.Color.Tomato;
             this.btnReset_.OnHovercolor = System.Drawing.Color.SandyBrown;
@@ -388,7 +389,7 @@
             this.btnStopSaveExcel_.IconVisible = true;
             this.btnStopSaveExcel_.IconZoom = 45D;
             this.btnStopSaveExcel_.IsTab = false;
-            this.btnStopSaveExcel_.Location = new System.Drawing.Point(1192, 8);
+            this.btnStopSaveExcel_.Location = new System.Drawing.Point(499, 8);
             this.btnStopSaveExcel_.Name = "btnStopSaveExcel_";
             this.btnStopSaveExcel_.Normalcolor = System.Drawing.Color.Crimson;
             this.btnStopSaveExcel_.OnHovercolor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
@@ -424,7 +425,7 @@
             this.btnSaveExcel_.IconVisible = true;
             this.btnSaveExcel_.IconZoom = 45D;
             this.btnSaveExcel_.IsTab = false;
-            this.btnSaveExcel_.Location = new System.Drawing.Point(1192, 8);
+            this.btnSaveExcel_.Location = new System.Drawing.Point(499, 8);
             this.btnSaveExcel_.Name = "btnSaveExcel_";
             this.btnSaveExcel_.Normalcolor = System.Drawing.Color.MediumSeaGreen;
             this.btnSaveExcel_.OnHovercolor = System.Drawing.Color.MediumAquamarine;
@@ -443,19 +444,11 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(1173, 572);
+            this.label1.Location = new System.Drawing.Point(480, 419);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 16);
             this.label1.TabIndex = 23;
             this.label1.Text = "1/1 tab(s)";
-            // 
-            // storeProgressBar
-            // 
-            this.storeProgressBar.Location = new System.Drawing.Point(893, 42);
-            this.storeProgressBar.Name = "storeProgressBar";
-            this.storeProgressBar.Size = new System.Drawing.Size(375, 10);
-            this.storeProgressBar.TabIndex = 24;
-            this.storeProgressBar.Visible = false;
             // 
             // backgroundWorker2
             // 
@@ -465,13 +458,33 @@
             this.backgroundWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker2_ProgressChanged);
             this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(890, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(68, 13);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "savinf file {0}";
+            this.label6.Visible = false;
+            // 
+            // storeProgressBar
+            // 
+            this.storeProgressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.storeProgressBar.Location = new System.Drawing.Point(0, 442);
+            this.storeProgressBar.Name = "storeProgressBar";
+            this.storeProgressBar.Size = new System.Drawing.Size(592, 10);
+            this.storeProgressBar.TabIndex = 26;
+            this.storeProgressBar.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1285, 597);
+            this.ClientSize = new System.Drawing.Size(592, 452);
             this.Controls.Add(this.storeProgressBar);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnStopSaveExcel_);
             this.Controls.Add(this.btnSaveExcel_);
@@ -486,10 +499,12 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label4);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(608, 491);
             this.Name = "Form1";
             this.Text = "Lawson Item Master List";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseEnter += new System.EventHandler(this.Form1_MouseEnter);
+            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -528,8 +543,9 @@
         private Bunifu.Framework.UI.BunifuFlatButton btnRun_;
         private Bunifu.Framework.UI.BunifuFlatButton btnStop_;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ProgressBar storeProgressBar;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ProgressBar storeProgressBar;
     }
 }
 

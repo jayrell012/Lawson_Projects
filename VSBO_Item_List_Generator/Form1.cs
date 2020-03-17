@@ -26,13 +26,16 @@ namespace VSBO_Item_List_Generator
         List<string> selectedStores = new List<string>();
         DB2Executer dB2Executer = new DB2Executer();
         StringBuilder strBuild = new StringBuilder();
+        FTPCon fTP = new FTPCon();
         query query = new query();
         bool boolAutomated;
         List<string> strsStoreSet = new List<string>();
         List<bool> boolFieldSet = new List<bool>();
         bool boolSaveExcel;
-        string strSavePath;
+        string strSavePath = "";
         bool boolExitAfterRunning;
+
+        string[] ftpCon = File.ReadAllLines(Environment.CurrentDirectory + @"\Configuration\FTPCONFIG.cfg");
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -40,7 +43,7 @@ namespace VSBO_Item_List_Generator
             fillChecklistStores();
             initializedTextConfig();
 
-            if(boolAutomated == true)
+            if (boolAutomated == true)
             {
                 autoSetUpDetailsBeforeRun();
                 buttonVisible("Run");
@@ -57,13 +60,19 @@ namespace VSBO_Item_List_Generator
             //Auto Select Stores
             foreach (string str in strsStoreSet)
             {
+                try
+                {
+                    var storeName = listStores.Where(x => x.storeID.Equals(Convert.ToInt32(str)))
+                                                      .Select(x => x.storeName).ToList();
 
-                var storeName = listStores.Where(x => x.storeID.Equals(Convert.ToInt32(str)))
-                                          .Select(x => x.storeName).ToList();
+                    int index = checkedListBox1.Items.IndexOf(storeName[0]);
 
-                int index = checkedListBox1.Items.IndexOf(storeName[0]);
-
-                checkedListBox1.SetItemChecked(index, true);
+                    checkedListBox1.SetItemChecked(index, true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message + $"\n\nPossible Solution: Check if the store id:{str} is in the list of operating stores at {Environment.CurrentDirectory + @"\STORELIST.csv"} \n\nIf you click OK, this store will be disregarded", "Warning", MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                }
             }
 
             //Auto Select Details
@@ -100,24 +109,38 @@ namespace VSBO_Item_List_Generator
         private void fillChecklistStores()
         {
             listStores = new List<Stores>();
+            string[] stores = File.ReadAllLines(Environment.CurrentDirectory + @"\STORELIST.csv");
 
-            dB2Executer = new DB2Executer();
-            dB2Executer.connect();
-            
-            var reader = dB2Executer.Reader(query.listOfStrores());
-            while(reader.Read())
+            for (int i = 1; i < stores.Count(); i++)
             {
-                Stores stores = new Stores();
-                stores.storeID = reader.GetInt32(0);
-                stores.storeName = reader.GetString(1).TrimEnd();
-                listStores.Add(stores);
+                Stores stor = new Stores();
+                stor.storeID = Convert.ToInt32(stores[i].Split(',')[0].TrimStart().TrimEnd());
+                stor.storeName = stores[i].Split(',')[1].TrimStart().TrimEnd();
+                
+                if (Convert.ToChar(stores[i].Split(',')[2].TrimStart().TrimEnd()) == 'A')
+                {
+                    listStores.Add(stor);
+                }
             }
 
-            for(int i = 0; i < listStores.Count; i++)
+            //dB2Executer = new DB2Executer();
+            //dB2Executer.connect();
+            //var reader = dB2Executer.Reader(query.listOfStrores());
+            //while (reader.Read())
+            //{
+            //    Stores stores = new Stores();
+            //    stores.storeID = reader.GetInt32(0);
+            //    stores.storeName = reader.GetString(1).TrimEnd();
+            //    listStores.Add(stores);
+            //}
+
+            for (int i = 0; i < listStores.Count; i++)
             {
                 checkedListBox1.Items.Add(listStores[i].storeName);
             }
 
+
+            
 
             //var data = dB2Executer.showDGV(query.listOfStrores());
 
@@ -256,13 +279,22 @@ namespace VSBO_Item_List_Generator
         private List<string> selectedStoresFunction()
         {
             selectedStores = new List<string>();
-            
-            foreach (string str in checkedListBox1.CheckedItems)
+            try
             {
-                selectedStores.Add(listStores.Where(x => x.storeName.Equals(str)).Select(x => x.storeID).ToList()[0].ToString());
-            }
 
-            return selectedStores;
+                foreach (string str in checkedListBox1.CheckedItems)
+                {
+                    selectedStores.Add(listStores.Where(x => x.storeName.Equals(str)).Select(x => x.storeID).ToList()[0].ToString());
+                }
+
+                return selectedStores;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + @"\nin selectedStoreFunction()");
+
+                return selectedStores;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -382,6 +414,7 @@ namespace VSBO_Item_List_Generator
 
                 count++;
                 DataTable dataTable = new DataTable();
+                dB2Executer.connect();
                 var reader = dB2Executer.Reader(String.Format(query.listOfItems(), strSelectedStore));
 
                 while (reader.Read())
@@ -446,21 +479,29 @@ namespace VSBO_Item_List_Generator
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.Cursor = Cursors.Default;
             panel3.Visible = false;
+            this.Cursor = Cursors.Default;
             dataGridView1.DataSource = listItems;
             label4.Text = $"Records: {listItems.Count}";
             buttonVisible("Done");
 
-            if (boolSaveExcel == true)
+            if (FTPConnection() == true)
             {
-                if (!backgroundWorker2.IsBusy)
+                if (boolSaveExcel == true)
                 {
-                    backgroundWorker2.RunWorkerAsync();
+                    if (!backgroundWorker2.IsBusy)
+                    {
+                        backgroundWorker2.RunWorkerAsync();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Execution Done", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
             {
+                MessageBox.Show("Cannot connect to FTP Server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 MessageBox.Show("Execution Done", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -571,9 +612,11 @@ namespace VSBO_Item_List_Generator
             panel1.Hide();
             panel2.Hide();
         }
-        private void button4_Click(object sender, EventArgs e)
+        
+        private bool FTPConnection()
         {
-            
+            bool conCheck = fTP.FTPConnectionCheck(ftpCon[0], ftpCon[1], ftpCon[2]);
+            return conCheck;
         }
 
         private void initializedTextConfig()
@@ -678,8 +721,12 @@ namespace VSBO_Item_List_Generator
             buttonVisible("Excel");
             List<object> list = e.UserState as List<object>;
 
+            
+            //MessageBox.Show(e.ProgressPercentage.ToString());
             storeProgressBar.Visible = true;
             storeProgressBar.Value = e.ProgressPercentage;
+            
+            label6.Text = String.Format("Saving File {0}%", e.ProgressPercentage);
             saveCSV(Convert.ToInt32(list[0]), list[1].ToString());
         }
 
@@ -687,8 +734,10 @@ namespace VSBO_Item_List_Generator
         {
             buttonVisible("Done");
             storeProgressBar.Visible = false;
+            label6.Hide();
+            TransferFileToFTPServer();
 
-            if(boolExitAfterRunning == true)
+            if (boolExitAfterRunning == true)
             {
                 Application.Exit();
             }
@@ -709,7 +758,7 @@ namespace VSBO_Item_List_Generator
 
                 grid.Columns[0].Visible = false;
                 grid.Columns[1].Visible = false;
-                grid.Columns[2].Visible = true;
+                grid.Columns[2].Visible = false;
                 grid.Columns[3].Visible = true;
                 grid.Columns[4].Visible = false;
                 grid.Columns[5].Visible = false;
@@ -758,6 +807,8 @@ namespace VSBO_Item_List_Generator
                         File.Delete(strSavePath + @"\" + $"{storeName}.csv");
                     }
                     File.AppendAllText(strSavePath + @"\" + $"{storeName}.csv", strBuild.ToString());
+
+                    outputDirectory = strSavePath;
                 }
                 catch
                 {
@@ -766,13 +817,56 @@ namespace VSBO_Item_List_Generator
                         File.Delete(Environment.CurrentDirectory + $@"\Result\{storeName}.csv");
                     }
                     File.AppendAllText(Environment.CurrentDirectory + $@"\Result\{storeName}.csv", strBuild.ToString());
+
+                    outputDirectory = Environment.CurrentDirectory + $@"\Result";
                 }
-                
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        string outputDirectory = "";
+
+        private void TransferFileToFTPServer()
+        {
+
+            try
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(outputDirectory);
+
+                if (outputDirectory != "")
+                {
+                    foreach (FileInfo fileInfo in dirInfo.GetFiles())
+                    {
+                        fTP.FTP(ftpCon[0], fileInfo.Name, ftpCon[1], ftpCon[2], fileInfo.FullName);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No file has been transferred to FTP Server because the Output Directory is empty", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            panel3.Parent = this;
+            panel3.BringToFront();
+            panel3.Location = new Point(
+                (this.Width - panel3.Width) / 2
+                , (this.Height - panel3.Height) / 2
+                );
         }
 
         //private int exportingPercentage(int min, int max)

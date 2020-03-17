@@ -1,0 +1,118 @@
+STORE_ID,STORE_NAME,ACTIVE
+9001,Master Store,A
+10002,Caruncho,I
+10003,Aurora Cubao,I
+10004,Baclaran,I
+10005,Pedro Gil,I
+10006,San Marcelino,I
+10007,J Elizondo,I
+10008,C Raymundo,I
+10009,Pearl Drive,A
+10010,Munoz,I
+10011,Quezon Blvd,I
+10012,Hermosa,I
+10013,Altura,I
+10014,Gastambide,I
+10015,Legarda,A
+10016,Carriedo,I
+10017,Chino Roces,A
+10018,FB Harrison,A
+10019,G. Tuazon,I
+10020,Soler,I
+10021,6789 Tower,A
+10022,Maypajo,I
+10023,Eisenhower,A
+10024,P. Noval,I
+10025,My Town,A
+10026,Magsaysay,I
+10027,Chino Roces 2,I
+10028,Manila Doctors,A
+10029,Alabang Town,A
+10030,Belmont,A
+10031,Citibank Plaza,A
+10032,Kalayaan,I
+10033,Pinagbuhatan,I
+10034,ACT Theatre,I
+10035,Villa Christina,I
+10036,Net Quad,A
+10037,OSMAK,I
+10038,PBCom Makati,A
+10039,Pinagsama,A
+10040,TYCOON Center,A
+10041,Three Central,A
+10042,Mckinley West,A
+10043,Amberland,A
+10044,Okada,A
+10045,Raffles Bldg,A
+10046,Newport 150,A
+10047,Grand Central,A
+10048,Smart Tower,A
+10049,Regis Katipunan,A
+10050,Ateneo Canteen,A
+10051,Southwoods Mall,A
+10052,RBC Sheridan,A
+10053,Village Square,A
+10054,UST Carpark,A
+10055,Silver City,A
+10056,IBM Plaza,I
+10057,ECO Tower,A
+10058,Menarco,A
+10059,Alphaland,A
+10060,One World,A
+10061,Newport 81,A
+10062,The Curve,A
+10063,Eton Cyberpod 3,A
+10064,Solaris One,A
+10065,NexGen,A
+10066,Met Live,A
+10067,M1 Tower,A
+10068,Keyland,A
+10069,Y Tower,A
+10070,Phil Flex,A
+10071,One Griffinstone,A
+10072,VLR,A
+10073,MDC100,A
+10074,Axis Tower 1,A
+10075,Kroma Tower,A
+10076,Lerato,A
+10077,Padilla,A
+10078,Milestone,A
+10079,Eton Corinthian,A
+10080,ICITE,A
+10081,Times Plaza,A
+10082,Avida 34th,A
+10083,West End Square,A
+10084,Asian Century,A
+10085,Acqua Pebbles,A
+10086,PITX,A
+10087,Liberty Plaza,A
+10088,South Park Mall,A
+10089,Diamond Tower,I
+10090,Ortigas Parklane,A
+10091,Eton Cyberpod 5,A
+10092,One Maridien,A
+10093,Ayala Malls Manila Bay,A
+10094,Brilliance,I
+10095,Tiffany Place,I
+10096,One Corp,I
+10097,Parkway Corporate Center,I
+10098,MPIRE Center,I
+10099,1800 Eastwood,I
+10100,Vantage,I
+10101,Southwoods Mall-Food Hall,I
+10102,Pacific Century Tower,I
+20018,FB Harrison_F,I
+20025,My Town_F,I
+20039,Pinagsama_F,I
+20041,Three Central_F,I
+20058,Menarco_F,I
+20060,One World_F,I
+20062,The Curve_F,I
+20065,NexGen_F,I
+20066,Met Live_F,I
+20067,M1 Tower_F,I
+20068,Keyland_F,I
+20069,Y Tower_F,I
+20070,Phil Flex_F,I
+20072,VLR_F,I
+20078,Milestone_F,I
